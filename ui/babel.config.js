@@ -9,23 +9,14 @@ module.exports = {
     '@babel/preset-react',
     '@babel/preset-flow',
   ],
-  plugins: [
-    '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-syntax-dynamic-import',
-  ],
+  plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-syntax-dynamic-import'],
   env: {
     production: {
       only: ['./src'],
-      plugins: [
-        '@babel/plugin-transform-react-inline-elements',
-        '@babel/plugin-transform-react-constant-elements',
-      ],
+      plugins: ['@babel/plugin-transform-react-inline-elements', '@babel/plugin-transform-react-constant-elements'],
     },
     test: {
-      plugins: [
-        '@babel/plugin-transform-modules-commonjs',
-        'dynamic-import-node',
-      ],
+      plugins: ['@babel/plugin-transform-modules-commonjs', 'dynamic-import-node'],
     },
   },
 };

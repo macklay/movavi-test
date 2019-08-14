@@ -6,14 +6,14 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
 import history from 'utils/history';
-import mailTemplatesServiceReducer from './modules/mailTemplatesService/reducer';
+import appService from './modules/appService/reducer';
 
 /**
  * Merges the main reducer with the router state and dynamically injected reducers
  */
 export default function createReducer(injectedReducers = {}) {
   const rootReducer = combineReducers({
-    mailTemplatesServiceReducer,
+    appService,
     router: connectRouter(history),
     ...injectedReducers,
   });

@@ -1,14 +1,21 @@
 // @flow
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { PageHeader } from 'antd';
+import renderHTML from 'react-render-html';
 
-export default function NotFound() {
+import html from '../../../../../../README.md';
+
+import * as styles from './Styles.scss';
+
+export default function HomePage() {
   return (
     <article>
       <Helmet>
         <title>Home Page</title>
       </Helmet>
-      <h1>Home Page</h1>
+      <PageHeader title='Intro' subTitle='Tips and notes' />
+      <div className={styles.content}>{renderHTML(html)}</div>
     </article>
   );
 }

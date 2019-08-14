@@ -5,21 +5,29 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PageHeader, Alert, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 
-import CategoriesTable from '../../components/CategoriesTable';
+import MessagesTable from '../../components/MessagesTable';
 import useMailTemplatesServiceReducer from '../../../mailTemplatesService/reducer';
 import useMailTemplatesServiceSagas from '../../../mailTemplatesService/saga';
 import {
   categoriesDataSelector,
   categoriesLoadingSelector,
   categoriesErrorSelector,
+  messagesDataSelector,
+  messagesLoadingSelector,
+  messagesErrorSelector,
 } from '../../../mailTemplatesService/selectors';
-import { readMailTplCategoriesAction, delMailTplCategoriesAction } from '../../../mailTemplatesService/actions';
+import {
+  readMailTplMessagesAction,
+  delMailTplMessagesAction,
+  readMailTplCategoriesAction,
+} from '../../../mailTemplatesService/actions';
 
-export default function CategoriesPage() {
+export default function MessagesPage() {
   const dispatch = useDispatch();
   useMailTemplatesServiceReducer();
   useMailTemplatesServiceSagas();
   useEffect(() => {
+    dispatch(readMailTplMessagesAction());
     dispatch(readMailTplCategoriesAction());
   }, []);
 
@@ -27,29 +35,38 @@ export default function CategoriesPage() {
   const categoriesLoading = useSelector(categoriesLoadingSelector);
   const categoriesError = useSelector(categoriesErrorSelector);
 
-  const handleCategoryDelete = useCallback(id => {
-    dispatch(delMailTplCategoriesAction(id));
-    message.warning('Cetegory deleted');
+  const messagesData = useSelector(messagesDataSelector);
+  const messagesLoading = useSelector(messagesLoadingSelector);
+  const messagesError = useSelector(messagesErrorSelector);
+
+  const handleMessageDelete = useCallback(id => {
+    dispatch(delMailTplMessagesAction(id));
+    message.warning('Message deleted');
   }, []);
 
   return (
     <article>
       <Helmet>
-        <title>Categories Page</title>
+        <title>Messages Page</title>
       </Helmet>
       <PageHeader
-        title={`Categories${categoriesData ? `(${categoriesData.size})` : ''}`}
-        subTitle='Mail templates categories'
+        title={`Messages${messagesData ? `(${messagesData.size})` : ''}`}
+        subTitle='Mail templates messages'
         extra={[
           <Button key='new' type='primary'>
-            <Link to='/categories/new'>Add new category</Link>
+            <Link to='/messages/new'>Add new message</Link>
           </Button>,
         ]}
       />
-      {categoriesError ? (
+      {messagesError || categoriesError ? (
         <Alert type='error' message='Something went wrong.' />
       ) : (
-        <CategoriesTable items={categoriesData} loading={categoriesLoading} onCategoryDelete={handleCategoryDelete} />
+        <MessagesTable
+          categories={categoriesData}
+          items={messagesData}
+          loading={messagesLoading || categoriesLoading}
+          onMessageDelete={handleMessageDelete}
+        />
       )}
     </article>
   );

@@ -15,8 +15,11 @@ export default function configureStore(initialState = {}, history) {
   /* istanbul ignore next */
   if (process.env.NODE_ENV !== 'production' && typeof window === 'object') {
     /* eslint-disable no-underscore-dangle */
-    if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
-      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({});
+    if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        name: 'Movavi test application',
+      });
+    }
 
     // NOTE: Uncomment the code below to restore support for Redux Saga
     // Dev Tools once it supports redux-saga version 1.x.x
@@ -36,13 +39,7 @@ export default function configureStore(initialState = {}, history) {
 
   const enhancers = [applyMiddleware(...middlewares)];
 
-  const store = createStore(
-    createReducer(),
-    initialState,
-    composeEnhancers(...enhancers),
-  );
-
-  // Extensions
+  const store = createStore(createReducer(), initialState, composeEnhancers(...enhancers)); // Extensions
   store.runSaga = sagaMiddleware.run;
   store.injectedReducers = {}; // Reducer registry
   store.injectedSagas = {}; // Saga registry
